@@ -1,8 +1,3 @@
-/*******************************************************************************
-  Use the terminal to clone the repository:
-  git -C $WORKSPACE clone https://github.com/Criptic/AI-Field-Notes.git
-*******************************************************************************/
-
 * More on the JSON libname engine: https://documentation.sas.com/doc/en/pgmsascdc/default/lestmtsglobal/n1jfdetszx99ban1rl4zll6tej7j.htm;
 libname config json '/workspaces/workspace/AI-Field-Notes/config.json';
 
