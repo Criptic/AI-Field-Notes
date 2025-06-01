@@ -1,3 +1,10 @@
+"""
+  Please check out the blog post for more details:
+  https://davidweik.substack.com/p/ai-field-notes-cw-20-2025
+
+  Use the terminal to clone the repository:
+  git -C $WORKSPACE clone https://github.com/Criptic/AI-Field-Notes.git
+"""
 import json
 # Ensure requests is installed
 try:

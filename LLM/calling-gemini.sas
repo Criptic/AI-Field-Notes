@@ -1,5 +1,20 @@
+/*************************************************************************
+  Please check out the blog post for more details:
+  https://davidweik.substack.com/p/ai-field-notes-cw-20-2025
+
+  Use the terminal to clone the repository:
+  git -C $WORKSPACE clone https://github.com/Criptic/AI-Field-Notes.git
+*************************************************************************/
+* Set the path + config.json file name here;
+%let pathToConfig = /workspaces/workspace/AI-Field-Notes/config.json;
+
 * More on the JSON libname engine: https://documentation.sas.com/doc/en/pgmsascdc/default/lestmtsglobal/n1jfdetszx99ban1rl4zll6tej7j.htm;
-libname config json '/workspaces/workspace/AI-Field-Notes/config.json';
+%if %sysfunc(fileExist(&pathToConfig.)) %then %do;
+    libname config json "&pathToConfig.";
+%end;
+%else %do;
+    %put ERROR: The configuration file can not be found at &pathToConfig. - adjust the macro variable to your environment.;
+%end;
 
 * Save the Gemini API-key into a macro variable;
 proc sql noPrint;
