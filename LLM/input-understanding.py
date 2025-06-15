@@ -37,7 +37,7 @@ input_config = {
 # Make the request to the API
 response = requests.post(f'https://generativelanguage.googleapis.com/v1beta/models/{llm}:generateContent?key={API_KEY}',
     headers={'Content-Type': 'application/json'},
-    data=f'{{"system_instruction": {{"parts": [{{"text": "{system_prompt}"}}]}}, "contents": [{{"parts": [{{"text": "{prompt}"}}]}}], "generation_config": {{"temperature": {input_config['temperature']}, "maxOutputTokens": {input_config["maxOutputTokens"]}, "topP": {input_config["topP"]}, "topK": {input_config["topK"]}, "candidate_count": {input_config["candidateCount"]}}}}}')
+    data=f'{{"system_instruction": {{"parts": [{{"text": "{system_prompt}"}}]}}, "contents": [{{"parts": [{{"text": "{prompt}"}}]}}], "generation_config": {{"temperature": {input_config["temperature"]}, "maxOutputTokens": {input_config["maxOutputTokens"]}, "topP": {input_config["topP"]}, "topK": {input_config["topK"]}, "candidate_count": {input_config["candidateCount"]}}}}}')
 
 # Check the response status and print the result
 if response.status_code == 200:
