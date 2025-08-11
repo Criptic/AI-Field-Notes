@@ -28,3 +28,4 @@ Since this is an ongoing series you might jump into this at a later point here a
 5. [Optional] Creating Gems in Gemini - https://davidweik.substack.com/i/168789063/deep-dive
 6. Creating a reusable function - https://davidweik.substack.com/i/169354155/deep-dive
 7. [Optional] Creating Embeddings with Gemini - https://davidweik.substack.com/i/170017004/deep-dive
+8. Simple evaluation - https://davidweik.substack.com/i/170591903/deep-dive
