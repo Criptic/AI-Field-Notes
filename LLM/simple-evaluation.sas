@@ -25,7 +25,7 @@ quit;
 * Remove the config library;
 libname config clear;
 
-%macro call_gemini(system_prompt, prompt, llm=gemini-2.5-flash-lite, temperature=1, maxOutputTokens=1000, topP=0.8, topK=10, output=work.response);
+%macro call_gemini(system_prompt, prompt, llm=gemini-2.5-flash-lite, temperature=1, maxOutputTokens=1000, topP=0.8, topK=10, output=work.response, id=1);
     /*
         Call the Gemini API with the provided parameters.
 
@@ -38,6 +38,7 @@ libname config clear;
         - top_p (float): The cumulative proability of tokens to consider when sampling. Default is 0.8.
         - top_k (int): The maximum number of tokens to consider when sampling. Default is 10.
         - output (str): The name of the output data set. Default is work.response.
+        - id (int): The ID of the run. Default is 1.
         
         Returns:
         - data set: A data set containing the response, input tokens, output tokens, and usage metadata.
@@ -76,8 +77,10 @@ libname config clear;
         libname response json;
 
         data &output.;
+            length id 8.;
             set response.content_parts(keep=Text);
             set response.usageMetaData(keep=promptTokenCount candidatesTokenCount);
+            id = &id.;
             llm = "&llm.";
             temperature = &temperature.;
             maxOutputTokens = &maxOutputTokens.;
@@ -103,13 +106,20 @@ proc import datafile='/workspaces/workspace/AI-Field-Notes/Datasets/simple-evalu
     delimiter=',';
 run; quit;
 
+data work.simple_eval;
+    length id 8.;
+    set work.simple_eval;
+    id = _n_;
+run;
+
 * Loop through the questions and call the Gemini API for each question;
 data _null_;
     length args $32000. user_prompt $1500. output_table $32.;
     set work.simple_eval;
     user_prompt = catx('', question, choices);
     output_table = compress('output=work.response_' || _n_);
-    args = catx('', '%nrstr(%call_gemini(', "&system_prompt.", ",'", user_prompt, "',", output_table, '))');
+    id_for_call = compress('id=' || id);
+    args = catx('', '%nrstr(%call_gemini(', "&system_prompt.", ",'", user_prompt, "',", output_table, ',', id_for_call, '))');
     call execute(args);
 run;
 
@@ -118,17 +128,19 @@ data work.responses;
     set work.response_:;
 run;
 
-data work.result;
-    set work.simple_eval;
-    set work.responses;
-    output;
-    call missing(of _all_);
-run;
+proc sql;
+    create table work.result as
+        select a.*,
+            b.*
+            from work.simple_eval as a
+                left join work.responses as b
+                    on a.id = b.id;
+run; quit;
 
 proc print data=work.result noObs; quit;
 
 /*
 * Optional clean up;
-%symdel API_KEY;
+%symdel API_KEY system_prompt;
 %sysmacdelete call_gemini;
 */
