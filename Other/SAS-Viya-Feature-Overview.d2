@@ -1,0 +1,60 @@
+direction: down
+
+# Components
+data: Data {
+  shape: cylinder
+  label: "List of new features of SAS Viya"
+}
+
+chunking: Embedding model & chunking strategy {
+  shape: rectangle
+}
+
+vectordb: VectorDB {
+  shape: hexagon
+  label: "Vector DB"
+}
+
+llm: LLM {
+  shape: rectangle
+}
+
+chat_interface: Chat Interface {
+  shape: rectangle
+  label: "Pre-built interface"
+}
+
+evaluations: Evaluations {
+  shape: rectangle
+  label: "Measure and track usefulness"
+}
+
+serving: A way to serve this to user {
+  shape: cloud
+}
+
+# Connections
+data -> chunking: Process features
+chunking -> vectordb: Embed & Store
+chat_interface -> llm: User Query
+llm -> vectordb: Retrieve relevant features
+
+vectordb -> llm
+llm -> chat_interface: Generate Response
+
+chat_interface -> evaluations: User interaction data
+evaluations -> llm: Feedback Loop {
+  label: "Refinement"
+  style: {
+    stroke-dash: 2
+  }
+}
+
+llm -> serving
+chat_interface -> serving
+serving -> llm: {
+  label: "Serves the application"
+  style: {
+    stroke-dash: 2
+  }
+}
