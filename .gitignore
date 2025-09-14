@@ -1,2 +1,7 @@
 config.json
 *.png
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+share/
